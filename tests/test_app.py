@@ -65,5 +65,62 @@ def test_resolved_ticket_displays_resolved_status(client):
 
     assert b'<span class="badge">Resolved</span>' in response.data
 
+
+def test_missing_title_returns_400(client):
+    response = client.post(
+        "/api/tickets",
+        json={
+            "description": "Printer issue",
+            "category": "Hardware",
+            "priority": "High"
+        }
+    )
+    assert response.status_code == 400
+
+
+def test_whitespace_title_returns_400(client):
+    response = client.post(
+        "/api/tickets",
+        json={
+            "title": "   ",
+            "description": "Printer issue",
+            "category": "Hardware",
+            "priority": "High"
+        }
+    )
+    assert response.status_code == 400
+
+
+def test_invalid_category_returns_400(client):
+    response = client.post(
+        "/api/tickets",
+        json={
+            "title": "Printer issue",
+            "category": "Furniture",
+            "priority": "High"
+        }
+    )
+    assert response.status_code == 400
+
+
+def test_invalid_priority_returns_400(client):
+    response = client.post(
+        "/api/tickets",
+        json={
+            "title": "Printer issue",
+            "category": "Hardware",
+            "priority": "Urgent"
+        }
+    )
+    assert response.status_code == 400
+
+
+def test_invalid_status_returns_400(client):
+    response = client.patch(
+        "/api/tickets/1/status",
+        json={"status": "Pending"}
+    )
+    assert response.status_code == 400
+
 # Add your own tests below: one failing test for each bug you find,
 # plus at least 5 negative tests.

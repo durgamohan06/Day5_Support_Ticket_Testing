@@ -58,6 +58,12 @@ def test_empty_title_returns_400(client):
 
     assert response.status_code == 400
 
+def test_resolved_ticket_displays_resolved_status(client):
+    response = client.get("/")
+
+    assert response.status_code == 200
+
+    assert b'<span class="badge">Resolved</span>' in response.data
 
 # Add your own tests below: one failing test for each bug you find,
 # plus at least 5 negative tests.

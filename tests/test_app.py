@@ -28,5 +28,25 @@ def test_unknown_ticket_returns_404(client):
     assert response.status_code == 404
 
 
+def test_tickets_are_sorted_by_priority(client):
+    response = client.get("/api/tickets")
+
+    assert response.status_code == 200
+
+    tickets = response.get_json()
+
+    priorities = [ticket["priority"] for ticket in tickets]
+
+    assert priorities == [
+        "High",
+        "High",
+        "Medium",
+        "Medium",
+        "Low"
+    ]
+
+    
+
+
 # Add your own tests below: one failing test for each bug you find,
 # plus at least 5 negative tests.
